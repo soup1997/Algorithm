@@ -1,4 +1,5 @@
 #include<iostream>
+<<<<<<< HEAD
 #include<vector>
 #include<algorithm>
 
@@ -32,10 +33,18 @@ void calc_price(vector<metal> bag, int& W) {
 	}
 
 	cout << price;
+=======
+
+using namespace std;
+
+int sum(int x, int y, int index) {
+	cout << "Case #" << index+1 << ":" << " " << x + y << endl;
+>>>>>>> 89765b17f8cd64177611a3d9856af349a7ef2d58
 }
 
 int main(int argc, char** argv)
 {
+<<<<<<< HEAD
 	int W, N;
 	int weight, price;
 	vector<metal> bag;
@@ -49,5 +58,14 @@ int main(int argc, char** argv)
 
 	sort(bag.begin(), bag.end(), compare);
 	calc_price(bag, W);
+=======
+	int num, x, y;
+	cin >> num;
+
+	for(auto i = 0; i < num; i++) {
+		cin >> x >> y;
+		sum(x, y, i);
+	}
+>>>>>>> 89765b17f8cd64177611a3d9856af349a7ef2d58
 	return 0;
 }
