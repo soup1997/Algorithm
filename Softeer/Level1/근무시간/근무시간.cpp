@@ -1,30 +1,3 @@
-<<<<<<< HEAD
-#include <iostream>
-
-using namespace std;
-
-bool comparator(int A, int B)
-{
-    if (A > B)
-    {
-        cout << "A";
-    }
-
-    else if (A < B)
-    {
-        cout << "B";
-    }
-
-    else
-        cout << "same";
-}
-int main(int argc, char **argv)
-{
-    int A, B;
-    cin >> A >> B;
-    comparator(A, B);
-    return 0;
-=======
 #include<iostream>
 #include<string>
 
@@ -67,5 +40,4 @@ int main(int argc, char** argv)
 	cout << res;
 
 	return 0;
->>>>>>> 89765b17f8cd64177611a3d9856af349a7ef2d58
 }
