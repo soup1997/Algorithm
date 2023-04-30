@@ -1,3 +1,4 @@
+// 3단계까지 갯수를 파악해보고 패턴을 파악하고 풀면 된다
 #include<iostream>
 #include<cmath>
 
