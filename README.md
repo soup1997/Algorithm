@@ -483,8 +483,103 @@ int main(int argc, char** argv) {
     return 0;
 }
 ```
-# 0x08 - 스택 활용
+# 0x08 - 스택 활용(수식의 괄호 쌍)
+스택의 대표적인 활용 사례로 수식의 괄호 쌍이랑 전위/중위/후위 표기법, DFS, Flood Fill등이 있다.
 
+## 수식의 괄호 쌍이란?
+![image](https://github.com/soup1997/Algorithm/assets/86957779/6d7048ad-fd87-4ecd-9397-f1bcad57992e)
+위의 그림과 같이 수식의 괄호 쌍이란, 주어진 괄호 문자열이 올바른지 판단하는 문제이다.
+문자열을 앞에서부터 읽어나갈 때, 닫는 괄호는 남아있는 괄호 중에서 가장 최근에 들어온 여는 괄호와 짝을 지어 없애버리는 명령이라고 생각하면 된다.
+
+## 문제 해결 방법
+1. 여는 괄호가 나오면 스택에 추가
+2. 닫는 괄호가 나왔을 경우
+- 스택이 비어있으면 올바르지 않은 괄호 쌍
+- 스택의 top이 짝이 맞지 않는 괄호일 경우 올바르지 않는 괄호 쌍
+- 스택의 top이 짝이 맞는 괄호일 경우 pop
+3. 모든 과정을 끝낸 후 스택에 괄호가 남아있으면 올바르지 않은 괄호 쌍, 남아있지 않으면 올바른 괄호 쌍
+
+## 연습 문제
+**BOJ 4949: 균형잡힌 세상**
+```cpp
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+int main(int argc, char** argv){
+    
+    while(true){
+        bool check = true;
+        string input;
+        stack<char> s;
+        
+        getline(cin, input); // 공백을 포함해 문자열 입력받기
+        cin.clear() ; // 입력 버퍼 비우기
+        
+        if(input == ".") break;
+        
+        for(auto c: input){
+            if(c == '[' || c == '('){
+                s.push(c);
+            }
+            
+            else if(c == ')'){
+                if(!s.empty() && s.top() == '(') s.pop(); // stack이 empty일때 top()하면 RuntimeError 발생
+                
+                else {
+                  check = false;
+                  break;
+                } 
+            }
+            
+            else if(c == ']'){
+                if(!s.empty() && s.top() == '[') s.pop();
+               
+                else {
+                  check = false;
+                  break;
+                } 
+            }
+        }
+        
+        if(s.empty() && check) cout << "yes\n";
+        else cout << "no\n";;
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+while True:
+    s = []
+    check = True
+    string = sys.stdin.readline().rstrip() # sys.stdin.readline에는 자동적으로 "\n"을 추가시킴, rstrip()으로 개행문자제거
+    
+    if string == ".": break
+    
+    for c in string:
+        if (c == '(') or (c == '['): s.append(c)
+    
+        elif (c == ')'):
+            if (len(s)!= 0) and (s[-1] == '('): s.pop()
+            
+            else:
+                check = False
+                break
+    
+        elif (c == ']'):
+            if (len(s)!= 0) and (s[-1] == '['): s.pop()
+            
+            else:
+                check = False
+                break
+    
+    if (len(s) == 0) and (check): print("yes")
+    else: print("no")
+```
 # 0x09 - BFS
 
 # 0x0A - DFS
