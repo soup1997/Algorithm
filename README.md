@@ -586,6 +586,7 @@ while True:
 
 ## 예시
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/06beebc6-432b-409f-ae7f-af7bf38dc7f7)
+
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/810c8ba8-33c6-4f89-aed7-d21419f98714)
 
 1. 시작하는 칸을 큐에 넣고 방문했다는 표시를 남김
