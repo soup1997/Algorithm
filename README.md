@@ -631,6 +631,7 @@ int main(int argc, char** argv) {
 
 ## 연습 문제
 **BOJ 1926: 그림**
+
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/e4dffc0e-0cf9-4b9a-9b0b-24aeebeec020)
 
 1. 상하좌우로 연결된 그림의 크기를 알아내기
