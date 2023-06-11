@@ -625,7 +625,8 @@ int main(int argc, char** argv) {
  }
 }
 ```
-![image](https://github.com/soup1997/Algorithm/assets/86957779/c9a3b4ca-755c-4388-a7e6-8a2fd5c7fed6)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/810c8ba8-33c6-4f89-aed7-d21419f98714)
+
 
 ## 연습 문제
 **BOJ 1926: 그림**
