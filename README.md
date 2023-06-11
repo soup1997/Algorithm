@@ -586,6 +586,8 @@ while True:
 
 ## 예시
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/06beebc6-432b-409f-ae7f-af7bf38dc7f7)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/810c8ba8-33c6-4f89-aed7-d21419f98714)
+
 1. 시작하는 칸을 큐에 넣고 방문했다는 표시를 남김
 2. 방문한 위치를 나타내는 큐의 원소를 꺼내어 그 칸에 상하좌우로 인접한 칸에 대해 3번을 진행
 3. 해당 칸을 이전에 방문했다면 아무것도 하지 않고, 처음으로 방문했다면 방문했다는 표시를 남기고 해당 칸을 큐에 삽입
@@ -625,8 +627,6 @@ int main(int argc, char** argv) {
  }
 }
 ```
-![image](https://github.com/soup1997/Algorithm/assets/86957779/810c8ba8-33c6-4f89-aed7-d21419f98714)
-
 
 ## 연습 문제
 **BOJ 1926: 그림**
