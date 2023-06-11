@@ -631,6 +631,7 @@ int main(int argc, char** argv) {
 ## 연습 문제
 **BOJ 1926: 그림**
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/e4dffc0e-0cf9-4b9a-9b0b-24aeebeec020)
+
 1. 상하좌우로 연결된 그림의 크기를 알아내기
 2. 도화지에 있는 모든 그림을 찾아내기, 총 4개의 그림 존재(이중 for문을 돌면서 BFS의 시작점이 될 수 있는 곳을 찾아야함)
 ```cpp
