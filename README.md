@@ -804,3 +804,7 @@ print(bfs(0, 0))
 # 0x10 - DP(Dynamic Programming)
 
 # 0x11 - Greedy
+
+# 0x15 - Hash
+
+# 0x17 - Heap
