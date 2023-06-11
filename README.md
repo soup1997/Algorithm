@@ -581,8 +581,60 @@ while True:
     if (len(s) == 0) and (check): print("yes")
     else: print("no")
 ```
-# 0x09 - BFS
+# 0x09 - BFS (Breadth First Search)
+다차원 배열에서 각 칸을 방문할 떄 너비를 우선으로 방문하는 알고리즘, queue를 사용하여 해결
 
+## 예시
+![image](https://github.com/soup1997/Algorithm/assets/86957779/06beebc6-432b-409f-ae7f-af7bf38dc7f7)
+1. 시작하는 칸을 큐에 넣고 방문했다는 표시를 남김
+2. 방문한 위치를 나타내는 큐의 원소를 꺼내어 그 칸에 상하좌우로 인접한 칸에 대해 3번을 진행
+3. 해당 칸을 이전에 방문했다면 아무것도 하지 않고, 처음으로 방문했다면 방문했다는 표시를 남기고 해당 칸을 큐에 삽입
+4. 큐가 빌 때 까지 2번을 반복
+모든 칸이 큐에 1번씩 들어가므로 시간복잡도는 칸이 N개일 때 O(N)
+
+```cpp
+#include <iostream>
+#include <vector> // vector안의 utility 헤더 정의되어 있음
+
+int board[502][502] = {...}; // 1이면 파란 칸, 0이면 빨간 칸
+bool vis[502][502]; // 방문 여부를 저장할 변수
+
+int n = 7, m = 10; // 7행 10열짜리 board
+
+// dx, dy 열을 기준으로, 좌상우하
+int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1};
+
+int main(int argc, char** argv) {
+ queue<pair<int, int>> Q;
+ vis[0][0] = 1; // 초기 시작 위치, 방문 표시
+ Q.push({0, 0});
+ 
+ while(!Q.empty()) { // Queue가 빌때까지 반복
+  pair<int, int> curr = Q.front();
+  Q.pop();
+  cout << '(' << curr.first << "," << curr.second << ") -> ";
+  for(int dir = 0; dir < 4; dir++) {
+   int nx = curr.first + dx[dir];
+   int ny = curr.second + dy[dir];
+   if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue; // 범위제한
+   if(vis[nx][ny] || board[nx][ny] != 1) continue; // 이미 방문했거나 또는 파란칸이 아니라면 pass
+   vis[nx][ny] = 1; // 방문 표시
+   Q.push({nx, ny}); // 방문했으므로 queue에 삽입
+  }
+ }
+}
+```
+![image](https://github.com/soup1997/Algorithm/assets/86957779/c9a3b4ca-755c-4388-a7e6-8a2fd5c7fed6)
+
+## 연습 문제
+**BOJ 1926: 그림**
+![image](https://github.com/soup1997/Algorithm/assets/86957779/e4dffc0e-0cf9-4b9a-9b0b-24aeebeec020)
+1. 상하좌우로 연결된 그림의 크기를 알아내기
+2. 도화지에 있는 모든 그림을 찾아내기, 총 4개의 그림 존재(이중 for문을 돌면서 BFS의 시작점이 될 수 있는 곳을 찾아야함)
+```cpp
+
+```
 # 0x0A - DFS
 
 # 0x0B - 재귀
