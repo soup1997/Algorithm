@@ -853,4 +853,8 @@ int main(int argc, char** argv){
 
 # 0x15 - Hash
 
+# 0x16 - Binary Tree
+
 # 0x17 - Heap
+
+# 0x18 - Graph
