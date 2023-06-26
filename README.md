@@ -789,8 +789,54 @@ def bfs(x, y):
 
 print(bfs(0, 0))
 ```
-# 0x0A - DFS
+# 0x0A - DFS (Depth First Search)
+다차원 배열에서 각 칸을 방문할 때 깊이를 우선으로 방문하는 알고리즘, BFS는 너비를 우선으로 방문하는 알고리즘이다.
 
+## 예시 
+![image](https://github.com/soup1997/Algorithm/assets/86957779/ea83dd0d-62f1-46bd-8b6b-255d46ee1c78)
+
+1. 시작하는 칸을 스택에 넣고 방문했다는 표시를 남김
+2. 스택에서 원소를 꺼내어 그 칸과 상하좌우로 인접한 칸에 대해 3번을 진행
+3. 해당 칸을 이전에 방문했다면 아무 것도 하지 않고, 처음으로 방문했다면 방문했다는 표시를 남기고 해당 칸을 스택에 삽입
+4. 스택이 빌 때 까지 2번을 반복, 모든 칸이 스택에 1번씩 들어가므로 시간복잡도는 칸이 N개일 때 O(N)
+
+## BFS와 DFS의 차이
+![image](https://github.com/soup1997/Algorithm/assets/86957779/59e159d4-4b0a-4c65-9f09-d34ebc4ecfb7)
+
+BFS는 큐를 쓰고 DFS는 스택을 쓴다는 차이가 있지만 원소 하나를 뺴내고 주변을 살펴본다는 알고리즘의 흐름은 똑같다. 하지만 둘의 가장 큰 차이점은 방문 순서에 있다.
+
+```cpp
+#include <iostream>
+#include <stack>
+#include <utility>
+
+using namespace std;
+int board[502][502];
+bool visit[502][502];
+int n = 7, m = 10;
+int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1};
+
+int main(int argc, char** argv){
+ stack<pair<int, int>> S;
+ vis[0][0] = 1;
+ S.push({0, 0});
+
+ while(!S.empty()){
+  pair<int, int> curr = S.top();
+  S.pop();
+
+  for(int dir=0; dir < 4; dir++){
+    int nx = curr.first + dx[dir];
+    int ny = curr.second + dy[dir];
+    if(nx < 0 || nx >= n || ny < 0 || ny >=m) continue; // direction이 범위를 넘어가면 continue
+    if(visit[nx][ny] || board[nx][ny] != 1) continue; // 이미 방문했거나, 방문할 수 없는 곳이면 continue
+    visit[nx][ny] = 1; // 방문 표시
+    S.push({nx, ny}); // 해당 칸을 스택에 삽입   
+  }
+ }
+}
+```
 # 0x0B - 재귀
 
 # 0x0C - 백트래킹
