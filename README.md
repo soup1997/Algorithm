@@ -858,3 +858,5 @@ int main(int argc, char** argv){
 # 0x17 - Heap
 
 # 0x18 - Graph
+
+# 0x19 - Tree
