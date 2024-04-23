@@ -1,5 +1,3 @@
-import sys
-
 string_hash = {}
 string = input().upper()
  
@@ -9,7 +7,6 @@ for i in set(string):
 values = list(string_hash.values())
 max_value = max(values)
 
-# handle exception
 if values.count(max_value) != 1:
     print("?")
 
