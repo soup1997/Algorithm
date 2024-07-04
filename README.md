@@ -837,6 +837,11 @@ int main(int argc, char** argv){
  }
 }
 ```
+
+# 0x10 - DP(Dynamic Programming)
+
+# 0x11 - Greedy
+
 # 0x17 - Heap
 우선순위큐라고도 하며 pop을 할때 가장 먼저 들어온 원소가 나오는 대신 우선순위가 가장 높은 원소가 나오는 큐
 최댓값을 찾기 위해 사용하는 힙을 최대 힙, 최솟값을 찾기 위해 사용하는 힙을 최소 힙이라고 칭함
@@ -882,25 +887,3 @@ int main(int argc, char** argv){
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/b9f69788-6640-4c52-b8c8-ddd7469ad414)
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/829b0717-ce1d-4c7d-b266-5a07458b42f5)
 ![image](https://github.com/soup1997/Algorithm/assets/86957779/2e9eff5d-0a7c-4220-a388-6dc61d3a60d7)
-
-# 0x0C - 백트래킹
-
-# 0x0D - 시뮬레이션
-
-# 0x0E - 정렬 I
-
-# 0x0F - 정렬 II
-
-# 0x10 - DP(Dynamic Programming)
-
-# 0x11 - Greedy
-
-# 0x15 - Hash
-
-# 0x16 - Binary Tree
-
-# 0x17 - Heap
-
-# 0x18 - Graph
-
-# 0x19 - Tree
