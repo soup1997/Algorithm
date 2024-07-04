@@ -1,4 +1,4 @@
-# Algorithm
+![image](https://github.com/soup1997/Algorithm/assets/86957779/883e6faa-9fb8-4fce-8c39-a17392374d66)# Algorithm
 ### [바킹독의 실전 알고리즘](https://blog.encrypted.gg/category/%EA%B0%95%EC%A2%8C/%EC%8B%A4%EC%A0%84%20%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98?page=)
 # 0x03 - 배열
 ![image](https://user-images.githubusercontent.com/86957779/235830792-23e96213-2212-46ab-b441-7ff6d06f4ab6.png)
@@ -837,19 +837,51 @@ int main(int argc, char** argv){
  }
 }
 ```
-# 0x0B - 재귀
-하나의 함수에서 자기 자신을 다시 호출해 작업을 수행하는 알고리즘\
-재귀 함수의 조건은 특정 입력에 대해서는 자기 자신을 호출하지 않고 종료되어야 함, 이를 base condition이라 칭함.\
-모든 입력은 base condition으로 수렴해야함
+# 0x17 - Heap
+우선순위큐라고도 하며 pop을 할때 가장 먼저 들어온 원소가 나오는 대신 우선순위가 가장 높은 원소가 나오는 큐
+최댓값을 찾기 위해 사용하는 힙을 최대 힙, 최솟값을 찾기 위해 사용하는 힙을 최소 힙이라고 칭함
 
-## 재귀에 대한 정보
-1. 함수로 인자로 어떤 것을 받고 어디까지 계산한 후 자기 자신에게 넘겨줄지 명확하게 정해야 함.
-2. 모든 재귀 함수는 반복문만으로 동일한 동작을 하는 함수를 만들 수 있음.
-3. 재귀는 반복문으로 구현했을 때에 비해 코드가 간결하지만 메모리/시간에서는 손해를 본다.
-4. 재귀함수가 자기 자신을 부를 때 프로세스의 스택 영역(지역 변수 저장)에 계속 누적이 된다.
+1. 원소의 추가가 O(log N)
+2. 우선순위가 가장 높은 원소의 확인이 O(1)
+3. 우선순위가 가장 높은 원소의 제거가 O(log N)
 
-## 연습 문제
-1. **BOJ: 1629: 곱셈**
+![image](https://github.com/soup1997/Algorithm/assets/86957779/98e3ff98-abe1-47a4-a906-a0781595fbf3)
+최소힙에서는 **부모**가 **자식**보다 작음, 예를 들어 2의 자식은 4, 9인데 모두 2보다 큰것을 확인할 수 있음
+이런식으로 배치를 할 경우 결론적으로 루트에 존재하는 값이 가장 작은 최솟값을 의미하게 됨!
+
+![image](https://github.com/soup1997/Algorithm/assets/86957779/c79c693f-9ab0-44ff-a22a-cfea756416e5)
+높이가 낮은 곳부터 채워나가며, 높이가 같은 정점의 경우에는 왼쪽부터 채워나간다
+
+## Insert
+![image](https://github.com/soup1997/Algorithm/assets/86957779/d3fbf4f0-897a-4136-a0cd-0b5321fb2408)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/95571186-d586-4a17-a94d-0006f195b79b)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/fdbfc40f-90e1-4cb2-b1bb-2358cbe2352f)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/c553f6ed-8e18-41fc-99bf-60f9594978a5)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/430ac8b8-a598-454f-9d42-9685e95ecae1)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/760168af-fb9c-440b-be64-e2edbc110668)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/da87f502-03a3-4359-a302-303c951db582)
+
+힙의 규칙에 위배되면 부모와 자식간의 교환이 발생한다는 사실을 꼭 기억하자!
+
+## Fetch
+![image](https://github.com/soup1997/Algorithm/assets/86957779/1d0e7237-c1b1-4609-8e63-2bed329d80f5)
+
+최소 힙에서는 최솟값을 효율적으로 확인할 수 있지만 열 번째로 작은 값의 확인이라던가 최댓값의 확인은 모든 원소를 다 탐색하지 않는 이상 불가능하다. 
+반대로 최대 힙이었다면 루트에 최댓값이 적혀 있으니 최댓값의 확인은 가능하지만 열 번째로 큰 값의 확인이라던가 최솟값의 확인은 마찬가지로 불가능하다. 
+
+## Erase
+최솟값인 루트 8을 지운다고 하면, 트리구조가 깨져버린다. 트리 구조상 가장 마지막 값인 52와 8의 자리를 바꾸고 8을 제거한다.
+
+![image](https://github.com/soup1997/Algorithm/assets/86957779/c509d661-9ca4-49e5-a00c-d789d6d59896)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/7c517ec9-670f-4e59-845c-64d9e299def2)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/0f1a000a-9f86-42b4-a6e7-1521d2812978)
+
+셋중에서 가장 최솟값인 12가 부모로 가야하므로 12와 52의 자리를 바꾼다.
+
+![image](https://github.com/soup1997/Algorithm/assets/86957779/02233170-8847-4d5a-8edf-98d7f94f155b)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/b9f69788-6640-4c52-b8c8-ddd7469ad414)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/829b0717-ce1d-4c7d-b266-5a07458b42f5)
+![image](https://github.com/soup1997/Algorithm/assets/86957779/2e9eff5d-0a7c-4220-a388-6dc61d3a60d7)
 
 # 0x0C - 백트래킹
 
