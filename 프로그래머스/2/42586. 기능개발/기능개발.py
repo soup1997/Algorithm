@@ -1,22 +1,18 @@
 def solution(progresses, speeds):
     answer = []
     
-    # Calculate the remaining days for each task
+    # 남은 일수 계산하기
     days = []
     for i, progress in enumerate(progresses):
         remains =  (100 - progress)
-        # Calculate the required days considering the speed
         day = (remains // speeds[i]) if (remains % speeds[i]) == 0 else (remains // speeds[i]) + 1
         days.append(day)
     
-    # Count the number of tasks that can be released together
-    while days:
-        # Take the first element as the benchmark
-        top = days.pop(0)
-        cnt = 1
+    # 배포가능 기능 갯수 세기
+    while len(days):
+        top, cnt = days.pop(0), 1
         
-        # Check subsequent tasks if they can be released together
-        while days and top >= days[0]:
+        while len(days) and top >= days[0]:
             days.pop(0)
             cnt += 1
         
