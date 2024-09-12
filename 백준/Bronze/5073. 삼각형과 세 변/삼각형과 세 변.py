@@ -1,22 +1,21 @@
 import sys
 
-def check():
-    while True:
-        a, b, c = map(int, sys.stdin.readline().split())
-        lines = sorted([a, b, c])
-        line_set = set(lines)
-        
-        if len(line_set) == 1 and 0 in line_set:
-            break
-
+while True:
+    edges = sorted(list(map(int, sys.stdin.readline().split())))
+    
+    if edges[0] == 0:
+        break
+    
+    # 가장 먼저 삼각형을 만들 수 있느냐 없느냐 부터 판단하고 들어가자
+    if edges[0] + edges[1] <= edges[2]: # 삼각형을 만들 수 없는 경우
+        print("Invalid")
+    
+    else: # 삼각형을 만들 수 있는 경우
+        if edges[0] == edges[1] and edges[1] == edges[2]:
+            print("Equilateral")
+    
+        elif edges[0] != edges[1] and edges[1] != edges[2] and edges[0] != edges[2]:
+            print("Scalene")
+    
         else:
-            if lines[-1] >= (lines[0] + lines[1]):
-                print("Invalid")
-            elif len(line_set) == 1:
-                print("Equilateral")
-            elif len(line_set) == 2:
-                print("Isosceles")
-            else:
-                print("Scalene")
-            
-check()
+            print("Isosceles")
