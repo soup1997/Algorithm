@@ -1,17 +1,14 @@
-string_hash = {}
-string = input().upper()
- 
-for i in set(string):
-    string_hash[i] = string.count(i)
+import sys
 
-values = list(string_hash.values())
-max_value = max(values)
+string = sys.stdin.readline().strip().upper()
+string_set = list(set(string))
+char_cnt = [string.count(c) for c in string_set]
 
-if values.count(max_value) != 1:
+maximum = max(char_cnt)
+
+if char_cnt.count(maximum) != 1: # maximum이 여러개 존재
     print("?")
 
-else:
-    for key in string_hash.keys():
-        if string_hash[key] == max_value:
-            print(key)
-            break
+else: # maximum이 1개만 존재
+    max_idx = char_cnt.index(maximum)
+    print(string_set[max_idx])
