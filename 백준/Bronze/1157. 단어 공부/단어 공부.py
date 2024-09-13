@@ -1,8 +1,7 @@
-string_hash = {}
-string = input().upper()
- 
-for i in set(string):
-    string_hash[i] = string.count(i)
+import sys
+
+string = sys.stdin.readline().strip().upper()
+string_hash = {c: string.count(c) for c in set(string)}
 
 values = list(string_hash.values())
 max_value = max(values)
