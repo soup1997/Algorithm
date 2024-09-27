@@ -10,14 +10,14 @@ while idx < len(s):
         S = ''
         while stack:
             S += stack.pop()
-        if S != "":
+        if S != '':
             ans.append(S)
         start = idx
         while s[idx] != ">": # tag 닫힐 때까지 idx 증가
             idx += 1
         ans.append(s[start:idx+1]) # tag 통째로 ans에 저장
             
-    elif s[idx] == " ": # 공백 검출출
+    elif s[idx] == " ": # 공백 검출
         stack.pop() # append 취소
         S = ''
         while stack:
