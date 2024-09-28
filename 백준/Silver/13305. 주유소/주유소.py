@@ -4,7 +4,7 @@ n = int(sys.stdin.readline()) # 도시의 갯수
 length = list(map(int, sys.stdin.readline().split())) # 도로의 길이
 price = list(map(int, sys.stdin.readline().split())) # 주유소의 가격
 
-minPrice = price[1]
+minPrice = price[0]
 cost = price[0] * length[0] # 처음에 기름 무조건 넣어야 함
 
 # 가격을 최소화 하기 위해, 가장 싼 곳에서 가장 많이 구해야 한다. 따라서 가격의 최솟값을 찾아야 한다.
