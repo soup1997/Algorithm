@@ -1,18 +1,24 @@
 #include <vector>
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
 vector<int> solution(vector<int> arr) 
 {
-    vector<int> answer;
+    stack<int> s;
+    vector<int> ans;
     
-    for (auto i : arr){
-        if (answer.empty()) answer.push_back(arr.front());
+    for(int a: arr){
+        if (s.empty()){
+            s.push(a);
+            ans.push_back(a);
+        }
         
-        else if (answer.back() != i) {
-            answer.push_back(i);
+        else if(s.top() != a){
+            s.push(a);
+            ans.push_back(a);
         }
     }
-    return answer;
+    return ans;
 }
