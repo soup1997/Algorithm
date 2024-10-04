@@ -393,6 +393,61 @@ int solution(vector<vector<string>> clothes) {
 
 ## 스택/큐
 
+### 카트 뭉치 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+string solution(vector<string> cards1, vector<string> cards2, vector<string> goal) {
+    string answer = "";
+    
+    queue<string> c1;
+    queue<string> c2;
+    queue<string> g;
+    
+    for(int i= 0; i < cards1.size(); i++){
+        c1.push(cards1[i]);
+    }
+    for(int j= 0; j < cards2.size(); j++){
+        c2.push(cards2[j]);
+    }
+    for(int k = 0; k < goal.size(); k++){
+        g.push(goal[k]);
+    }
+    
+    for(int l = 0; l < goal.size(); l++){
+        if(g.empty()){
+            return "Yes";
+        }
+        
+        else{
+            if(!c1.empty() && g.front() == c1.front()){
+                g.pop();
+                c1.pop();
+            }
+        
+            else if(!c2.empty() && g.front() == c2.front()){
+                g.pop();
+                c2.pop();
+            }
+        }
+    }
+    
+    if(g.empty()){
+        return "Yes";
+    } else{
+        return "No";
+    }
+}
+```
+
+> 맨처음에 return 조건을 `if(c1.empty() && c2.empty()) return "Yes";`로 했는데 어디가 틀린걸까?
+
+> 흠 그냥 안전하게 `g.empty()`로 하자 이게 목적이니까 반례는 생각이 안난다
+
 ### 같은 숫자는 싫어 - 프로그래머스
 ```cpp
 #include <vector>
@@ -565,6 +620,43 @@ int solution(vector<int> scoville, int K) {
 
 ## 정렬
 
+### 정수 내림차순으로 배치하기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+long long solution(long long n) {
+    string s = to_string(n);
+    vector<char> nums(s.length());
+    for(char c: s){
+        nums.push_back(c);
+    }
+    
+    sort(nums.begin(), nums.end(), greater<>()); // 내림차순 정렬
+    
+    string answer;
+    
+    for(char n:nums){
+        answer += n;
+    }
+    
+    return stoull(answer);
+}
+```
+
+> `long long` 굉장히 오랜만에 보는 자료형이다
+
+> `stoi(): string to int`   
+> `stoil(): string to unsigned long`   
+> `stof(): string to float`   
+> `stod(): string to double`   
+> `stold(): string to long double`
+
+---
+
 ### K번쨰 수 - 프로그래머스
 ```cpp
 #include <string>
@@ -702,6 +794,43 @@ int solution(vector<int> citations) {
 ## 완전탐색
 
 ## 그리디
+
+### 예산 - 프로그래머스
+```cpp
+#include <iostream>
+#include <string>
+#include <vector>
+#include <numeric>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<int> d, int budget) {
+    if(accumulate(d.begin(), d.end(), 0) == budget){
+        return d.size();
+    }
+    else{
+        sort(d.begin(), d.end()); // 오름차순 정렬
+        int cnt = 0;
+        
+        for(int i=0; i<d.size(); i++){
+            budget -= d[i];
+            
+            if(budget >= 0){
+                cnt++;
+            }
+            else break;
+        }
+        return cnt;
+    }
+}
+```
+
+> 자 그럼 왜 정렬을 하느냐? 최대한 많은 부서에게 예산을 분배해야 하므로 가장 작은 부서부터 차례대로 예산을 분배하면 가장 많이 분배할 수 있다
+
+> 그리디 문제는 결국 전략 싸움이다
+
+---
 
 ### 돌 게임 - 백준
 
@@ -1157,6 +1286,40 @@ int solution(vector<vector<int>> maps)
 ---
 ## 구현
 
+### 가장 가까운 글자 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+
+using namespace std;
+
+vector<int> solution(string s) {
+    vector<int> answer;
+    
+    unordered_map<char, int> um; // 문자와 인덱스
+    
+    for(int i=0; i < s.length(); i++){
+        auto iter = um.find(s[i]);
+        if(iter == um.end()){
+            um[s[i]] = i;
+            answer.push_back(-1);
+        }
+        
+        else{
+            answer.push_back(i - um[s[i]]);
+            um[s[i]] = i;
+        }
+    }
+    return answer;
+}
+```
+
+> 가장 가까운 글자를 구해야 하므로 um을 순회하면서 해당 글자가 발견되면 index를 업데이트 시켜준다!
+
+---
+
 ### 팰린드롬 - 프로그래머스
 ```cpp
 #include <string>
@@ -1389,16 +1552,6 @@ int main(int argc, char** argv){
 
 > 채널이 최대 100개면, KBS1, KBS2가 리스트에 마지막에 연속적으로 있다고 해도 400언저리이다. 따라서 1번, 4번만 이용
 
-### 대피소
-
-N이 얼마 안되므로 완전탐색 돌려도 무방하다는 것을 눈치 채야함.
-
-
-```cpp
-```
-
-> 내껄로 다시 만들자!
-
 ---
 
 ### 집합 - 백준
@@ -1483,7 +1636,6 @@ int main(int argc, char** argv) {
 
 ---
 
-
 ###  줄세우기 - 백준
 
 정렬 문제를 처음 접하다 보니 어떻게 풀어야할지 감이 안잡혔던 문제, 정렬 방식 중 가장 구현이 간단한 Bubble Sort 방식으로 풀면 되는 문제다
@@ -1523,4 +1675,68 @@ int main(int argc, char** argv){
 }
 ```
 
-> 버블정렬
+> 버블정렬이다
+
+## 수학
+
+### 합성수 찾기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(int n) {   
+    int fusionNum = 0;
+    
+    for(int i = 1; i <= n; i++){
+        int cnt = 0;
+        for(int j = 2; j < i; j++){ // 자기자신과 1은 제외
+            if(i % j == 0) cnt++;
+            
+            if(cnt >= 1){
+                fusionNum++; // 자기자신과 1은 제외하므로 cnt가 1이상이면 됨
+                break;
+            }
+        }
+    }
+    
+    return fusionNum;
+}
+```
+
+> 그냥 단순하게 약수 구하는 문제
+
+### 최대공약수와 최소공배수 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(int n, int m) {
+    vector<int> answer;
+    
+    if(m % n == 0){
+        answer.push_back(n);
+        answer.push_back(m);
+    } 
+    else{
+        int maxNum = 1;
+        for(int i=1; i < n; i++){
+            if(n % i == 0 && m % i == 0){
+                maxNum = max(maxNum, i);
+            }
+        }
+        answer.push_back(maxNum);
+        int n1 = n / maxNum;
+        int n2 = m / maxNum;
+        answer.push_back(maxNum * n1 * n2);
+    }
+    
+    return answer;
+}
+```
+
+> 테스트 케이스는 `[3, 12]`, `[2, 5]`와 같은 것만 주어졌는데 `[6, 27]` 같은 반례가 있다는 것을 고려해야 함
