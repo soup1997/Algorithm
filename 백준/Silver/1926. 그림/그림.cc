@@ -1,56 +1,76 @@
 #include <iostream>
 #include <queue>
-#include <utility> // pair
-#include <algorithm> // max
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-int board[502][502];
-bool vis[502][502];
-int dx[4] = {1, 0, -1, 0};
-int dy[4] = {0, 1, 0, -1};
+int n, m;
+int grid[500][500] = {0, };
+bool visited[500][500] = {false, };
+int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 상하좌우
+queue<pair<int, int>> q;
 
-int main(int argc, char** argv) {
-    int n, m;
-    int max_size = 0, num = 0;
-    cin >> n >> m;
-    queue<pair<int, int>> Q;
+
+bool inRange(int x, int y){
+    return x >= 0 && x < n && y >= 0 && y < m;
+}
+
+bool isVisited(int x, int y){
+    return visited[x][y];
+}
+
+bool canGo(int x, int y){
+    return inRange(x, y) && !isVisited(x, y) && grid[x][y] == 1;
+}
+
+int bfs(pair<int, int> pos){  
+    int area = 1; // 시작점도 포함하므로 1로 시작
     
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++){
-            cin >> board[i][j];
-        }
-    }
+    q.push({pos.first, pos.second}); // 방문 안했으면 큐에 집어 넣는다
+    visited[pos.first][pos.second] = true; // 방문처리
     
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++){
-            if(board[i][j] == 1 && vis[i][j] == 0){
-                int size = 0;
-                queue<pair<int, int>> Q;
-                
-                vis[i][j] = 1; // 시작점 방문 표시
-                Q.push(make_pair(i, j)); // 시작점 큐에 삽입, bfs 시작
-                       
-                while(!Q.empty()){
-                    pair<int, int> curr = Q.front();
-                    Q.pop();
-                    size++;
-                    
-                    for(int dir = 0; dir < 4; dir++){
-                        int nx = curr.first + dx[dir];
-                        int ny = curr.second + dy[dir];
-                        
-                        if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                        if(vis[nx][ny] || board[nx][ny] != 1) continue;
-                        vis[nx][ny] = 1;
-                        Q.push(make_pair(nx, ny));
-                    }
-                }
-                max_size = max(max_size, size);
-                num++;
+    while(!q.empty()){
+        int x = q.front().first;
+        int y = q.front().second;
+        q.pop(); // 방문처리 했으므로 큐에서 제거
+        
+        for(int i=0; i < 4; i++){
+            int dx = dirs[i][0], dy = dirs[i][1];
+            
+            if(canGo(x+dx, y+dy)){
+                q.push({x+dx, y+dy});
+                visited[x+dx][y+dy] = true;
+                area++; // 그림의 넓이증가
             }
         }
     }
-    cout << num << "\n" << max_size;
+    return area;
+}
+
+int main(int argc, char** argv){
+    int maxArea = 0;
+    
+    cin >> n >> m;
+    
+    // grid 생성
+    for(int i=0; i < n; i++){
+        for(int j=0; j < m; j++){
+            cin >> grid[i][j];
+        }
+    }
+    
+    int paintingNum = 0;
+    
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(canGo(i, j)){ // 그림인 경우에만 BFS 시작
+                int area = bfs({i, j});
+                maxArea = max(maxArea, area);
+                paintingNum++;
+            }
+        }
+    }
+    cout << paintingNum << "\n" << maxArea;
     return 0;
 }
