@@ -733,7 +733,472 @@ int main(int argc, char** argv){
 
 ## DFS/BFS
 
+### 그림 - 백준
+
+BFS로 푼 방식
+
+```cpp
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int n, m;
+int grid[500][500] = {0, };
+bool visited[500][500] = {false, };
+int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 상하좌우
+queue<pair<int, int>> q;
+
+bool inRange(int x, int y){
+    return x >= 0 && x < n && y >= 0 && y < m;
+}
+
+bool isVisited(int x, int y){
+    return visited[x][y];
+}
+
+bool canGo(int x, int y){
+    return inRange(x, y) && !isVisited(x, y) && grid[x][y] == 1;
+}
+
+int bfs(pair<int, int> pos){  
+    int area = 1; // 시작점도 포함하므로 1로 시작
+    
+    q.push({pos.first, pos.second}); // 방문 안했으면 큐에 집어 넣는다
+    visited[pos.first][pos.second] = true; // 방문처리
+    
+    while(!q.empty()){
+        int x = q.front().first;
+        int y = q.front().second;
+        q.pop(); // 방문처리 했으므로 큐에서 제거
+        
+        for(int i=0; i < 4; i++){
+            int dx = dirs[i][0], dy = dirs[i][1];
+            
+            if(canGo(x+dx, y+dy)){
+                q.push({x+dx, y+dy});
+                visited[x+dx][y+dy] = true;
+                area++; // 그림의 넓이증가
+            }
+        }
+    }
+    return area;
+}
+
+int main(int argc, char** argv){
+    int maxArea = 0;
+    
+    cin >> n >> m;
+    
+    // grid 생성
+    for(int i=0; i < n; i++){
+        for(int j=0; j < m; j++){
+            cin >> grid[i][j];
+        }
+    }
+    
+    int paintingNum = 0;
+    
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(canGo(i, j)){ // 그림인 경우에만 BFS 시작
+                int area = bfs({i, j});
+                maxArea = max(maxArea, area);
+                paintingNum++;
+            }
+        }
+    }
+    cout << paintingNum << "\n" << maxArea;
+    return 0;
+}
+```
+
+DFS로 푼 방식
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int n, m;
+int grid[500][500] = {0, };
+bool visited[500][500] = {false, };
+int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 상하좌우
+int area = 1; // 그림의 넓이
+
+bool inRange(int x, int y){
+    return x >= 0 && x < n && y >= 0 && y < m;
+}
+
+bool isVisited(int x, int y){
+    return visited[x][y];
+}
+
+bool canGo(int x, int y){
+    return inRange(x, y) && !isVisited(x, y) && grid[x][y] == 1;
+}
+
+void dfs(pair<int, int> pos){
+    visited[pos.first][pos.second] = true; // 방문처리
+    
+    int x = pos.first;
+    int y = pos.second;
+               
+    for(int i=0; i < 4; i++){
+        int dx = dirs[i][0], dy = dirs[i][1];
+            
+        if(canGo(x+dx, y+dy)){
+            area++; // 그림의 넓이증가
+            dfs({x+dx, y+dy});
+        }
+    }
+}
+
+int main(int argc, char** argv){
+    int maxArea = 0;
+    cin >> n >> m;
+    
+    // grid 생성
+    for(int i=0; i < n; i++){
+        for(int j=0; j < m; j++){
+            cin >> grid[i][j];
+        }
+    }
+    
+    int paintingNum = 0;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(canGo(i, j)){ // 그림인 경우에만 BFS 시작
+                dfs({i, j});
+                maxArea = max(maxArea, area);
+                area = 1; // 전역변수 area 초기화
+                paintingNum++;
+            }
+        }
+    }
+    cout << paintingNum << "\n" << maxArea;
+    return 0;
+}
+```
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int n, m;
+int grid[500][500] = {0, };
+bool visited[500][500] = {false, };
+int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 상하좌우
+
+bool inRange(int x, int y){
+    return x >= 0 && x < n && y >= 0 && y < m;
+}
+
+bool isVisited(int x, int y){
+    return visited[x][y];
+}
+
+bool canGo(int x, int y){
+    return inRange(x, y) && !isVisited(x, y) && grid[x][y] == 1;
+}
+
+int dfs(pair<int, int> pos){
+    visited[pos.first][pos.second] = true; // 방문 처리
+    int area = 1; // 자기 자신(현재 위치)도 넓이에 포함
+
+    int x = pos.first;
+    int y = pos.second;
+
+    for(int i = 0; i < 4; i++){
+        int dx = dirs[i][0], dy = dirs[i][1];  // dirs로 수정
+
+        if(canGo(x + dx, y + dy)){
+            area += dfs({x + dx, y + dy}); // 재귀적으로 연결된 영역의 넓이를 더함
+        }
+    }
+
+    return area; // 최종적으로 넓이를 반환
+}
+
+int main(int argc, char** argv){
+    int maxArea = 0;
+    cin >> n >> m;
+    
+    // grid 생성
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            cin >> grid[i][j];
+        }
+    }
+    
+    int paintingNum = 0;
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(canGo(i, j)){ // 방문하지 않은 그림 부분에 대해 DFS 시작
+                int area = dfs({i, j}); // 해당 그림의 넓이를 계산
+                maxArea = max(maxArea, area); // 최대 넓이 갱신
+                paintingNum++; // 그림의 개수 증가
+            }
+        }
+    }
+    cout << paintingNum << "\n" << maxArea;
+    return 0;
+}
+```
+
+> 첫번째 코드는 반환 없이 작동하는 dfs, 두번째 코드는 area를 리턴하는 dfs
+
+> 첫번째 코드에서 BFS와는 다르게 재귀로 작동하므로 dfs호출전에 `area++`를 실행해줘야 한다.
+
+---
+
+### 토마토 - 백준
+```cpp
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+
+// 만약, 저장될 때부터 모든 토마토가 익어있는 상태이면 0을 출력해야 하고, 
+// 토마토가 모두 익지는 못하는 상황이면 -1을 출력해야 한다.
+
+using namespace std;
+
+int n, m;
+int grid[1000][1000] = {0, };
+
+int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 상하좌우
+queue<pair<int, int>> q;
+
+bool inRange(int x, int y) {
+    return x >= 0 && x < n && y >= 0 && y < m;
+}
+
+bool canGo(int x, int y) {
+    return inRange(x, y) && grid[x][y] == 0; // 아직 익지 않은 토마토
+}
+
+pair<int, int> bfs() {  
+    int day = 0;
+    int ripeTomato = 0;    // 익은 토마토의 수
+    
+    while (!q.empty()) {
+        int size = q.size(); // 현재 레벨의 크기
+
+        for (int s = 0; s < size; s++) {
+            int x = q.front().first;
+            int y = q.front().second;
+            q.pop(); // 큐에서 제거
+            ripeTomato++; // 익은 토마토 수 증가
+
+            for (int i = 0; i < 4; i++) {
+                int dx = dirs[i][0], dy = dirs[i][1];         
+                if (canGo(x + dx, y + dy)) {
+                    grid[x + dx][y + dy] = 1; // 토마토를 익었다고 표시
+                    q.push({x + dx, y + dy}); // 익은 토마토를 큐에 추가
+                }
+            }
+        }
+        if (!q.empty()) day++; // 큐에 아직 토마토가 남아 있으면 하루가 지나야 함
+    }
+
+    return {ripeTomato, day};
+}
+
+int main() {
+    int totalTomato = 0;
+    pair<int, int> ans;
+    cin >> m >> n;
+    
+    // grid 생성
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> grid[i][j];
+            if (grid[i][j] == 0 || grid[i][j] == 1) {
+                if(grid[i][j] == 1){
+                    q.push({i, j}); // 1인지점 모두 큐에 넣기
+                }
+                totalTomato++; // 총 토마토의 갯수 세기
+            }
+        }
+    }
+    
+    ans = bfs();
+
+    // 모든 토마토가 익었는지 확인
+    if (ans.first == totalTomato) {
+        cout << ans.second << "\n"; // 모든 토마토가 익었다면 걸린 일수 출력
+    } else {
+        cout << -1 << "\n"; // 익지 못하는 경우
+    }
+    return 0;
+}
+```
+
+> 잘 안풀려서 GPT의 도움을 받은 문제, 익으면서 1로 표시하므로 visited 배열이 필요가 없다!
+
+> BFS의 원칙에 따라, 한 번의 반복(day)에서 현재 레벨의 모든 노드를 처리하고 나서야 다음 레벨의 노드로 넘어갈 수 있다
+
+> 이 말은 만약에 grid 탐색하면서 1인지점을 2개 발견했다고 가정하면 이 두 시작지점은 같은날에 익기 시작한다. 따라서 `q.size()`만큼 반복문을 도는 것이다!
+
+### 타겟 넘버 - 프로그래머스
+![alt text](image/image.png)
+![alt text](image/image-1.png)
+
+명백한 트리구조, dfs/bfs를 사용할 수 있다!
+
+```cpp
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int answer = 0;
+int n;
+
+void dfs(vector<int> &v, int idx, int sum, int &target){
+    int tmp1 = sum + v[idx]; // + 조합
+    int tmp2 = sum - v[idx]; // - 조합
+    
+    // 주어진 numbers에 끝에 도달 했으므로 idx가 끝을 가리킴 (종료조건)
+    if((idx == n-1) && (target == tmp1 || target == tmp2)){
+        answer++;
+    }
+
+    // 재귀조건
+    else if(idx < n-1){
+        dfs(v, idx+1, tmp1, target);
+        dfs(v, idx+1, tmp2, target);
+    }
+}
+ 
+int solution(vector<int> numbers, int target) {
+    n = numbers.size();
+    dfs(numbers, 0, 0, target);
+    
+    return answer;
+}
+```
+
+> dfs이고 재귀 방법으로 푸는 문제, 재귀로 차근차근 접근하는 방식이 옳아보인다.
+
+> 백트래킹을 아직 배우진 않았지만 백트래킹에 가까운 문제이지 않을까 한다.
+
+---
+
+### 게임 맵 최단거리 - 프로그래머스
+```cpp
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <iostream>
+
+// 최단거리를 구하는 문제니까 BFS로 풀자
+using namespace std;
+
+int n, m;
+int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 인접 4방향
+queue<vector<int>> q;
+
+bool isVisited(int x, int y, vector<vector<bool>> &visited){
+    return visited[x][y];
+}
+
+bool inRange(int x, int y){
+    return x >= 0 && x < n && y >= 0 && y < m;
+}
+
+bool canGo(int x, int y, vector<vector<int>> &maps, vector<vector<bool>> &visited) {
+    return inRange(x, y) && !visited[x][y] && maps[x][y] == 1;
+}
+
+int bfs(vector<int> root, vector<vector<int>> &maps, vector<vector<bool>> &visited){
+    q.push(root);
+    visited[root[0]][root[1]] = true;
+    
+    while(!q.empty()){
+        int x = q.front()[0];
+        int y = q.front()[1];
+        int dist = q.front()[2];
+        q.pop();
+        
+        if(x == n-1 && y == m-1) return dist;
+        
+        for(int i=0; i < 4; i++){
+            int dx = dirs[i][0], dy = dirs[i][1];
+            if(canGo(x+dx, y+dy, maps, visited)){
+                q.push({x+dx, y+dy, dist+1});
+                visited[x+dx][y+dy] = true;
+            }
+        }
+    }
+    return -1;
+}
+
+int solution(vector<vector<int>> maps)
+{
+    n = maps.size();
+    m = maps[0].size();
+    vector<vector<bool>> visited(n, vector<bool>(m, false)); // vector로 2차원 배열 크기 초기화 하는 방법
+    return bfs({0, 0, 1}, maps, visited);
+}
+```
+> 최단 거리를 구현할떈 큐에 거리 정보까지 넣어줘야 한다는 사실을 명심할 것
+
+> 종료조건을 `if(visited[n-1][m-1]) return dist;` 로 맨처음에 작성함
+
+> 아 생각해보니까 n-1하고 m-1이 이때의 dist라는 보장이 없겠구나, 완전히 이해함
+
+---
 ## 구현
+
+### 팰린드롬 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int solution(int n, int m) {
+    int answer = 0;
+
+    for(int i=n; i <=m; i++){
+        string s = to_string(i);
+
+        if(s.length() == 1){
+            answer++;
+            continue;
+        }
+
+        int idx1 = 0;
+        int idx2 = s.length()-1;
+
+        while(idx1 < idx2){
+            if(s[idx1] == s[idx2]){
+                idx1++;
+                idx2--;
+            }
+            else break;
+        }
+
+        if(idx1 >= idx2){
+            answer++;
+        }
+    }
+    return answer;
+}
+```
+
+> 맨처음에 스택으로 시작할까 생각했음. string에 존재하는 문자를 입력받아서 스택에 집어넣기 위해 string 길이 만큼 반복문을 돌고, 다시 pop하기 위해 string 길이만큼 반복문을 돌고 s와 비교? 무조건 시간초과임
+
+> 투포인터다! 앞 인덱스와 뒤 인덱스를 설정하고 앞 인덱스가 뒤 인덱스보다 커질떄까지 while문을 돌면서 비교하면 된다!!
 
 ### ZOAC 4  - 백준
 
