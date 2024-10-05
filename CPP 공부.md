@@ -63,11 +63,8 @@ int main(){
     um["A"] = 1111;
     um["B"] = 2222;
 
-    for(auto it: um) // it으로 주소값이 넘어옴
-    {
-        // key-value의 특성에 따라 접근하면 된다.
-        cout << "key  : " << it->first << endl; // 문자열 A, B 출력
-        cout << "value: " << it->second << endl; // 정수형 1111, 2222 출력
+    for (auto it = m.begin(); it != m.end(); ++it) {
+    answer.push_back(it->first);  // 'it' is an iterator, so use '->'
     }
 
     return 0;
@@ -215,6 +212,48 @@ int main(int argc, char** argv){
 # 실전문제 [백준, 프로그래스, 코드트리]
 
 ## Hash
+
+### 두개 뽑아서 더하기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+
+using namespace std;
+
+vector<int> solution(vector<int> numbers) {
+    vector<int> answer;
+    map<int, int> m; // ordered map (오름차순 정렬)
+    
+    for(int i = 0; i < numbers.size() - 1; i++){
+        for(int j = i + 1; j < numbers.size(); j++){
+            int comb = numbers[i] + numbers[j];
+            m[comb] = 0;
+        }
+    }
+    
+    for (auto it = m.begin(); it != m.end(); ++it) { // iterator도 연속된 공간에 위치하므로 1씩 차이난다
+        answer.push_back(it->first);
+    }
+
+    /*
+    for (auto it : m) {
+        answer.push_back(it.first);
+    }
+    */
+
+    
+    return answer;
+}
+```
+
+> 중복을 없애기 위해 map사용 (ordered_map 이므로 이미 오름차순 정렬이 되어있다)
+
+> iterator와 원소 값의 차이를 명확히 알고 있을 것
+
+---
+
 
 ### 폰켓몬 - 프로그래머스
 ```cpp
@@ -549,7 +588,7 @@ bool solution(string s)
 }
 ```
 
-> top 확인할 떄 비어있으면 segmentation falut 발생함, empty()인지 먼저 체크할 것
+> top 확인할 때 비어있으면 segmentation falut 발생함, empty()인지 먼저 체크할 것
 
 ### 주식가격 - 프로그래머스
 ```cpp
@@ -619,6 +658,41 @@ int solution(vector<int> scoville, int K) {
 
 
 ## 정렬
+
+### 과일 장수 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+
+using namespace std;
+
+// vector를 slice하는 함수
+vector<int> slice(vector<int> &score, int a, int b) {
+    return vector<int>(score.begin() + a, score.begin() + b); // Corrected slice bounds
+}
+
+int solution(int k, int m, vector<int> score) {
+    int price = 0;
+    
+    sort(score.begin(), score.end(), greater<>()); // 내림차순 정렬
+    
+    int idx = 0;
+    while (idx + m - 1 < score.size()) {
+        vector<int> segScore = slice(score, idx, idx + m); // Slice m elements
+        price += (segScore[m-1] * m); // Multiply smallest value by m
+        idx += m; // Move forward by m
+    }
+    
+    return price;
+}
+```
+
+> `*min_element(segScore.begin(), segScore.end())` 와 같이 사용할 수도 있음
+
+> *이 붙는 이유는 min_element나 max_element 모두 iterator를 반환하기 때문
+
 
 ### 정수 내림차순으로 배치하기 - 프로그래머스
 ```cpp
@@ -792,6 +866,46 @@ int solution(vector<int> citations) {
 > 다른 풀이는 i 값을 토대로 순차적으로 풀었다. 이렇게 하면 오름차순 정렬이 필수적이긴 하겠다.
 
 ## 완전탐색
+
+### 소수 만들기 - 프로그래머스
+```cpp
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int isPrime(const int &num){
+    for(int i=2; i < num; i++){
+        if(num % i == 0){
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int solution(vector<int> nums) {
+    sort(nums.begin(), nums.end());
+    
+    int answer = 0;
+
+    for(int i = 0; i < nums.size() - 2; i++){ // O(N^3)
+        for(int j = i + 1; j < nums.size() - 1; j++){
+            for(int k = j + 1; k < nums.size(); k++){
+                int number = nums[i] + nums[j] + nums[k];
+                answer += isPrime(number);
+            }
+        }
+    }
+
+    return answer;
+}
+```
+
+> nums의 최대길이가 50이라서 삼중 반복문 안돌아도 시간초과가 나지 않는다!
+
+---
+
 
 ## 그리디
 
@@ -1284,7 +1398,227 @@ int solution(vector<vector<int>> maps)
 > 아 생각해보니까 n-1하고 m-1이 이때의 dist라는 보장이 없겠구나, 완전히 이해함
 
 ---
+
 ## 구현
+
+## 로또의 최고순위와 최저순위 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int convert2Rank(const int &cnt){
+    switch(cnt){
+        case 6:
+            return 1;  // 6개 맞춘 경우 1등
+        case 5:
+            return 2;  // 5개 맞춘 경우 2등
+        case 4:
+            return 3;  // 4개 맞춘 경우 3등
+        case 3:
+            return 4;  // 3개 맞춘 경우 4등
+        case 2:
+            return 5;  // 2개 맞춘 경우 5등
+        default:
+            return 6;  // 그 외는 6등
+    }
+}
+
+vector<int> solution(vector<int> lottos, vector<int> win_nums) {
+    int matched = 0, zeroCount = 0;
+    
+    // 당첨 번호를 쉽게 찾기 위한 정렬
+    sort(win_nums.begin(), win_nums.end());
+    
+    // 로또 번호와 당첨 번호 비교
+    for (int num : lottos) {
+        if (num == 0) {
+            zeroCount++;  // 0의 개수를 카운트
+        } else if (find(win_nums.begin(), win_nums.end(), num) != win_nums.end()) {
+            matched++;  // 일치하는 번호가 있으면 카운트
+        }
+    }
+    
+    // 최고 순위: 0의 개수만큼 추가로 맞힐 수 있음
+    int maxRank = convert2Rank(matched + zeroCount);
+    // 최저 순위: 0을 모두 틀린 것으로 가정
+    int minRank = convert2Rank(matched);
+    
+    return {maxRank, minRank};
+}
+```
+
+> find()사용하면 되는구나 간단하네, zeroCount를 안해서 틀린문제 완전히 
+
+---
+
+## 다트 게임 - 프로그래머스
+```cpp
+#include <string>
+#include <cmath>
+#include <iostream>
+
+using namespace std;
+
+int solution(string dartResult) {
+    int answer = 0;
+    int prev = 0, score = 0;
+    
+    for(int i = 0; i < dartResult.size(); i++)
+    {   
+        if(dartResult[i] >= '0' && dartResult[i] <= '9') // 숫자를 처리하는 부분
+        {
+            prev = score;
+            
+            if(dartResult[i + 1] == '0')
+            {
+                score = 10;
+                i++; // for문 indexing 하나 건너뛰기
+            }
+            else
+                score = dartResult[i] - '0';
+        }
+        
+        else if(dartResult[i] == 'S' || dartResult[i] == 'D' || dartResult[i] == 'T') // 점수를 처리하는 부분
+        {
+            if(dartResult[i] == 'D') {
+                score = pow(score, 2);
+            }
+            
+            else if(dartResult[i] == 'T') {
+                score = pow(score, 3);
+            }
+            
+            if(dartResult[i + 1] == '*') {
+                answer -= prev;
+                prev *= 2;
+                score *= 2;
+                i++;
+                answer += prev;
+            }
+            
+            else if(dartResult[i + 1] == '#'){
+                score *= -1;
+                i++;
+            }
+            
+            answer += score;
+        }
+    }
+    
+    return answer;
+}
+```
+
+> 전형적인 개 무식한 구현 문제, for문을 돌면서 i++를 하면 인덱싱 하나를 건너뛸 수 있다!
+
+> 문자열을 하나하나 받아올 때 char 자료형이 들어간다. atoi 이런거 안먹히니까 `char c -'0'` 을 해주자
+
+---
+
+### 콜라츠 추측 - 프로그래머스
+
+```cpp
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(int num) {
+    int iteration = 0;
+    
+    long long cNum = static_cast<long long>(num); // int 자료형 범위를 넘어갈 수 있으므로 long long으로 변환
+    
+    while(iteration < 500){
+        if(cNum == 1){
+            return iteration;
+        }
+        
+        else{
+            if(cNum % 2 == 0){
+                cNum /= 2;
+            } else{
+                cNum = (cNum * 3) + 1;
+            }
+            iteration++;
+        }
+    }
+    return -1;
+}
+```
+
+> int 자료형 범위가 넘어갈 수 있으므로 long long으로 변환해야 함!
+
+---
+
+### 합성수 찾기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(int n) {   
+    int fusionNum = 0;
+    
+    for(int i = 1; i <= n; i++){
+        int cnt = 0;
+        for(int j = 2; j < i; j++){ // 자기자신과 1은 제외
+            if(i % j == 0) cnt++;
+            
+            if(cnt >= 1){
+                fusionNum++; // 자기자신과 1은 제외하므로 cnt가 1이상이면 됨
+                break;
+            }
+        }
+    }
+    
+    return fusionNum;
+}
+```
+
+> 그냥 단순하게 약수 구하는 문제
+
+---
+
+### 최대공약수와 최소공배수 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(int n, int m) {
+    vector<int> answer;
+    
+    if(m % n == 0){
+        answer.push_back(n);
+        answer.push_back(m);
+    } 
+    else{
+        int maxNum = 1;
+        for(int i=1; i < n; i++){
+            if(n % i == 0 && m % i == 0){
+                maxNum = max(maxNum, i);
+            }
+        }
+        answer.push_back(maxNum);
+        int n1 = n / maxNum;
+        int n2 = m / maxNum;
+        answer.push_back(maxNum * n1 * n2);
+    }
+    
+    return answer;
+}
+```
+
+> 테스트 케이스는 `[3, 12]`, `[2, 5]`와 같은 것만 주어졌는데 `[6, 27]` 같은 반례가 있다는 것을 고려해야 함
+
+---
 
 ### 가장 가까운 글자 - 프로그래머스
 ```cpp
@@ -1361,7 +1695,7 @@ int solution(int n, int m) {
 
 > 맨처음에 스택으로 시작할까 생각했음. string에 존재하는 문자를 입력받아서 스택에 집어넣기 위해 string 길이 만큼 반복문을 돌고, 다시 pop하기 위해 string 길이만큼 반복문을 돌고 s와 비교? 무조건 시간초과임
 
-> 투포인터다! 앞 인덱스와 뒤 인덱스를 설정하고 앞 인덱스가 뒤 인덱스보다 커질떄까지 while문을 돌면서 비교하면 된다!!
+> 투포인터다! 앞 인덱스와 뒤 인덱스를 설정하고 앞 인덱스가 뒤 인덱스보다 커질때까지 while문을 돌면서 비교하면 된다!!
 
 ### ZOAC 4  - 백준
 
@@ -1676,67 +2010,3 @@ int main(int argc, char** argv){
 ```
 
 > 버블정렬이다
-
-## 수학
-
-### 합성수 찾기 - 프로그래머스
-```cpp
-#include <string>
-#include <vector>
-#include <iostream>
-
-using namespace std;
-
-int solution(int n) {   
-    int fusionNum = 0;
-    
-    for(int i = 1; i <= n; i++){
-        int cnt = 0;
-        for(int j = 2; j < i; j++){ // 자기자신과 1은 제외
-            if(i % j == 0) cnt++;
-            
-            if(cnt >= 1){
-                fusionNum++; // 자기자신과 1은 제외하므로 cnt가 1이상이면 됨
-                break;
-            }
-        }
-    }
-    
-    return fusionNum;
-}
-```
-
-> 그냥 단순하게 약수 구하는 문제
-
-### 최대공약수와 최소공배수 - 프로그래머스
-```cpp
-#include <string>
-#include <vector>
-
-using namespace std;
-
-vector<int> solution(int n, int m) {
-    vector<int> answer;
-    
-    if(m % n == 0){
-        answer.push_back(n);
-        answer.push_back(m);
-    } 
-    else{
-        int maxNum = 1;
-        for(int i=1; i < n; i++){
-            if(n % i == 0 && m % i == 0){
-                maxNum = max(maxNum, i);
-            }
-        }
-        answer.push_back(maxNum);
-        int n1 = n / maxNum;
-        int n2 = m / maxNum;
-        answer.push_back(maxNum * n1 * n2);
-    }
-    
-    return answer;
-}
-```
-
-> 테스트 케이스는 `[3, 12]`, `[2, 5]`와 같은 것만 주어졌는데 `[6, 27]` 같은 반례가 있다는 것을 고려해야 함
