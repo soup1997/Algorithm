@@ -659,6 +659,37 @@ int solution(vector<int> scoville, int K) {
 
 ## 정렬
 
+### 문자열 내 마음대로 정리하기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int N;
+
+// 오름차순은 < , 내림차순은 > 형태이다.
+bool comp(string a, string b){
+    if (a[N] == b[N]){
+        return a < b; // true면 b는 뒤에 정렬, false면 a가 앞에 정렬
+    }
+    else{
+        return a[N] < b[N];
+    }
+}
+
+vector<string> solution(vector<string> strings, int n) {
+    N = n;
+    
+    sort(strings.begin(), strings.end(), comp);
+    
+    return strings;
+}
+```
+
+> python sort와 비슷하게 내가 조건을 설정해 줄 수 있다. < 이면 오름차순 > 내림차순 이란걸 쉽게 기억하자!
+
 ### 과일 장수 - 프로그래머스
 ```cpp
 #include <string>
@@ -1400,6 +1431,170 @@ int solution(vector<vector<int>> maps)
 ---
 
 ## 구현
+
+### 시저 암호 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+
+
+using namespace std;
+
+string solution(string s, int n) {
+    string answer = "";
+    
+    for(char c: s){
+        if (c == ' '){
+            answer += ' ';
+        }
+        
+        else{
+            char newC;
+            if(c >= 'a' && c <= 'z'){ // 소문자인 경우
+                newC = ((c - 'a' + n) % 26) + 'a';
+            }
+            
+            else{ // 대문자인 경우
+                newC = ((c - 'A' +  n) % 26) + 'A';
+            }
+            answer += newC;
+        }
+    }
+    return answer;
+}
+```
+
+> C++에서는 유독 아스키 코드를 다룰일이 많은 거 같다, alphabet의 갯수가 26임을 미리 숙지하고 있자
+
+---
+
+### 크레인 인형 뽑기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+int solution(vector<vector<int>> board, vector<int> moves) {
+    int answer = 0;
+    
+    stack<int> reward;
+    int explode = 0;
+    
+    for(int j = 0; j < moves.size(); j++){
+        for(int i = 0; i < board.size(); i++){
+            if(board[i][moves[j]-1] != 0){
+                if(!reward.empty() && reward.top() == board[i][moves[j]-1]){ // 스택의 탑이랑 같은지 확인
+                    reward.pop(); // 같은 모양 폭발
+                    explode += 2;
+                }
+                else{ // 스택이 비어있고 top이랑 같지 않다면 바로 스택에 추가
+                    reward.push(board[i][moves[j]-1]);
+                }
+                
+                board[i][moves[j]-1] = 0; // 비어있다는 표시로 0으로 바꿈
+                break; // 인형을 하나 꺼냈으면 그 열에서 더 이상 찾지 않음
+            }
+        }
+    }
+    return explode;
+}
+```
+
+> 구현과 스택이 섞여 있는 문제, 꽤 괜찮은 문제라고 생각한다
+
+### 정수 제곱근 판별 - 프로그래머스
+```cpp
+#include <cmath>
+#include <iostream>
+
+using namespace std;
+
+long long solution(long long n) {
+    long long answer = 0;
+    long long a = sqrt(n);
+    
+    if (a*a == n) {	// 양의 정수x의 제곱인 경우
+        answer= (a+1) * (a+1);
+    }
+    else {	// 아닌 경우
+        answer=-1;
+    }
+    return answer;
+}
+```
+> 풀이 할만한게 딱히 없다. sqrt 했을때 3같은 경우라면 1.xxxx라서 a에 1이 들어갈 것이다. 
+
+---
+
+### 3진법 뒤집기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+#include <cmath>
+#include <iostream>
+
+using namespace std;
+
+string convert2Triple(int n){
+    string s = "";
+    
+    // n이 0보다 클 때까지 3으로 나누면서 나머지를 문자열에 추가
+    while(n > 0){
+        s += to_string(n % 3); // 나머지를 문자열에 추가
+        n /= 3;  // n을 3으로 나눔
+    }
+    return s;  // 3진법으로 변환된 문자열 (역순으로 저장됨)
+}
+
+int solution(int n) {
+    string s = convert2Triple(n);  // 3진법으로 변환된 문자열
+    int power = s.length()-1;  // 역순으로 처리되기 때문에 power는 처음에 0으로 시작
+    int answer = 0;
+    
+    for(char c: s){
+        answer += (c - '0') * pow(3, power);  // 3의 제곱을 계산하여 더함
+        power--;
+    }
+    
+    return answer;
+}
+```
+
+> n진법에 대한 개념을 가지고 있어야 풀 수 있는 문제, 문제 자체는 쉬운것 같다.
+
+
+### 공 던지기 - 프로그래머스
+```cpp
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(vector<int> numbers, int k) {
+    int answer = 0;
+    
+    if(k == 1){
+        return numbers[0];
+    }
+    
+    else{
+        int idx = 0, cnt = 0;
+        int target;
+        while(cnt != k){
+            target = numbers[idx % numbers.size()];
+            idx += 2;
+            cnt++;
+        } 
+        answer = target;
+    }
+    return answer;
+}
+```
+
+> idx가 2씩 증가한다, idx 사이즈가 벡터의 크기를 넘어갈 수 있으므로 size()의 나머지 연산자로 segmentation fault가 일어나지 않도록 한다.
+
 
 ## 로또의 최고순위와 최저순위 - 프로그래머스
 ```cpp
