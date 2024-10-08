@@ -840,6 +840,8 @@ int main(int argc, char** argv){
 
 # 0x10 - DP(Dynamic Programming)
 
+# 0x0c - 백트래킹
+
 # 0x11 - Greedy
 Greedy란 지금 가장 최적인 답을 근시안적으로 택하는 알고리즘을 의미하며, 즉 관찰을 통해 탐색 범위를 줄이는 알고리즘을 의미한다.
 
