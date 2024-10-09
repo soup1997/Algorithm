@@ -1,21 +1,20 @@
-# 보트로 가장 무거운 사람과 가장 가벼운 사람을 같이 묶어서 처리하는게 핵심
-from collections import deque
-
 def solution(people, limit):
-    boat = 0
-    people = deque(sorted(people))
+    answer = 0
+    people.sort() # 정렬 후 몸무게 큰 사람과 작은 사람을 짝지음
+
+    idx1, idx2 = 0, len(people) - 1
     
-    while len(people) > 1:
-        if people[0] + people[-1] <= limit: # 최댓값과 최솟값 묶어서 보트태움
-            boat += 1
-            people.pop()    # 최대 빼기
-            people.popleft()    # 최소 빼기
+    while(idx1 <= idx2):  # 두 명씩 구출해서 다 구출할 때까지 비교
+        minWeight = people[idx1]
+        maxWeight = people[idx2]
+        
+        if(minWeight + maxWeight <= limit):  # limit 보다 작거나 같으면 둘다 구출 가능
+            idx1 += 1
+            idx2 -= 1
             
-        else:
-            boat += 1
-            people.pop() # 최대 빼기
+        else: # 안되면 일단 몸무게 큰 사람부터 먼저 구출
+            idx2 -= 1    
             
-    if people:  # people에 1명 남아있는 경우 처리
-        boat += 1
-                
-    return boat
+        answer += 1
+        
+    return answer
