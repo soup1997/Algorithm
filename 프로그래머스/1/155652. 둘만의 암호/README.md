@@ -1,10 +1,10 @@
 # [level 1] 둘만의 암호 - 155652 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/155652) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/155652?language=cpp) 
 
 ### 성능 요약
 
-메모리: 10.1 MB, 시간: 0.73 ms
+메모리: 4.13 MB, 시간: 0.03 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 10월 11일 19:22:51
+2024년 10월 11일 19:31:23
 
 ### 문제 설명
 
